@@ -1,0 +1,79 @@
+ #!/usr/bin/python 
+ 
+from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor
+
+import tty, termios, time, webiopi, datetime     
+import atexit
+
+# create a default object, no changes to I2C address or frequency
+mh = Adafruit_MotorHAT(addr=0x60)
+
+# recommended for auto-disabling motors on shutdown!
+def turnOffMotors():
+	mh.getMotor(1).run(Adafruit_MotorHAT.RELEASE)
+	mh.getMotor(2).run(Adafruit_MotorHAT.RELEASE)
+	mh.getMotor(3).run(Adafruit_MotorHAT.RELEASE)
+mh.getMotor(4).run(Adafruit_MotorHAT.RELEASE)
+
+atexit.register(turnOffMotors)
+
+myMotor3 = mh.getMotor(3)
+myMotor4 = mh.getMotor(4)
+
+myMotor3.setSpeed(200)
+myMotor4.setSpeed(200)
+
+
+# The getch method can determine which key has been pressed
+# by the user on the keyboard by accessing the system files
+# It will then return the pressed key as a variable
+def getch():
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd)
+    try:
+        tty.setraw(sys.stdin.fileno())
+        ch = sys.stdin.read(1)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+    return ch
+
+#define motor's control
+
+def forward():
+ myMotor3.run(Adafruit_MotorHAT.FORWARD)
+ myMotor4.run(Adafruit_MotorHAT.FORWARD)
+ time.sleep(0.07)
+
+def backward():
+ myMotor3.run(Adafruit_MotorHAT.BACKWARD)
+ myMotor4.run(Adafruit_MotorHAT.BACKWARD)
+ time.sleep(0.07)
+
+
+def left():
+ myMotor4.run(Adafruit_MotorHAT.BACKWARD)
+ myMotor3.run(Adafruit_MotorHAT.FORWARD)
+ time.sleep(0.07)
+
+def right():
+ myMotor4.run(Adafruit_MotorHAT.FORWARD)
+ myMotor3.run(Adafruit_MotorHAT.BACKWARD)
+ time.sleep(0.07)
+
+
+def stop():
+	myMotor3.run(Adafruit_MotorHAT.RELEASE)
+	myMotor4.run(Adafruit_MotorHAT.RELEASE)
+
+
+server = webiopi.Server(port=8000, login="webiopi", password="raspberrypi")
+
+server.addMacro(forward)
+server.addMacro(backward)
+server.addMacro(right)
+server.addMacro(left)
+server.addMacro(stop)
+
+
+webiopi.runLoop()
+server.stop()
