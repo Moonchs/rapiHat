@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content = "height = device-height, width = 420, user-scalable = no" /> 
+    <link rel="stylesheet" href="style.css" /> 
+    <title>PiCar</title>
+    <script type="text/javascript" src="/webiopi.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript">
+
+        function init() {
+        }
+
+
+        function Stop() {
+                webiopi().callMacro("stop");
+        }
+
+        function Forward() {
+                webiopi().callMacro("forward");
+        }
+
+
+        function Reverse() {
+               webiopi().callMacro("backward");
+        }
+
+        function TurnLeft() {
+               webiopi().callMacro("left");
+        }
+
+        function TurnRight() {
+               webiopi().callMacro("right");
+        }
+        
+webiopi().ready(init);
+
+  </script>
+    <style  type="text/css">
+        button.small {
+            margin: 1px 1px 1px 1px;
+            width: 24px;
+            height: 24px;
+            font-size: 12pt;
+            font-weight: bold;
+            color: black;
+        }
+
+        button   {
+            margin: 1px 1px 1px 1px;
+            width: 90px;
+            height: 24px;
+            font-size: 12pt;
+            font-weight: bold;
+            color: black;
+        }
+    </style>
+
+
+</head>
+<body>
+
+			<div align="center"><br/>
+				<img id="video" width="320" height="240" src="http://0.0.0.0:8080/?action=stream"><br/><br/>
+			</div>
+
+	<div id="commandes" align="center">
+						<tr><td colspan=3 align="center"><button class="long" type="button" onmousedown="Forward()" onmouseup="Stop()">Avancer</button></td></tr><br/>						               
+                    <button type="button" onmousedown="TurnLeft()" onmouseup="Stop()">Gauche</button></td>
+                    <button type="button" onclick="Stop()">Stop</button></td>
+                    <button type="button" onmousedown="TurnRight()" onmouseup="Stop()">Droite</button></td></tr><br/>
+                    <button type="button" onmousedown="Reverse()" onmouseup="Stop()">Reculer</button></td></tr>
+    </div>
+</body>
+</html>
