@@ -1,0 +1,125 @@
+ #!/usr/bin/python
+from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor
+
+import sys, tty, termios, time     
+import atexit
+
+    # create a default object, no changes to I2C address or frequency
+mh = Adafruit_MotorHAT(addr=0x60)
+
+
+# recommended for auto-disabling motors on shutdown!
+def turnOffMotors():
+	mh.getMotor(1).run(Adafruit_MotorHAT.RELEASE)
+	mh.getMotor(2).run(Adafruit_MotorHAT.RELEASE)
+	mh.getMotor(3).run(Adafruit_MotorHAT.RELEASE)
+	mh.getMotor(4).run(Adafruit_MotorHAT.RELEASE)
+
+atexit.register(turnOffMotors)
+
+myMotor3 = mh.getMotor(3)
+myMotor4 = mh.getMotor(4)
+
+myMotor3.setSpeed(200)
+myMotor4.setSpeed(200)
+
+
+# The getch method can determine which key has been pressed
+# by the user on the keyboard by accessing the system files
+# It will then return the pressed key as a variable
+def getch():
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd)
+    try:
+        tty.setraw(sys.stdin.fileno())
+        ch = sys.stdin.read(1)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+    return ch
+
+#define motor's control
+
+def motor_forward():
+ myMotor3.run(Adafruit_MotorHAT.FORWARD)
+# myMotor3.run(Adafruit_MotorHAT.RELEASE)
+ myMotor4.run(Adafruit_MotorHAT.FORWARD)
+ time.sleep(0.07)
+# myMotor4.run(Adafruit_MotorHAT.RELEASE)
+
+def motor_backward():
+ myMotor3.run(Adafruit_MotorHAT.BACKWARD)
+# myMotor3.run(Adafruit_MotorHAT.RELEASE)
+ myMotor4.run(Adafruit_MotorHAT.BACKWARD)
+ time.sleep(0.07)
+# myMotor4.run(Adafruit_MotorHAT.RELEASE)
+
+def motor_left():
+ myMotor4.run(Adafruit_MotorHAT.BACKWARD)
+ myMotor3.run(Adafruit_MotorHAT.FORWARD)
+ time.sleep(0.07)
+ #myMotor3.run(Adafruit_MotorHAT.RELEASE)
+
+def motor_right():
+ myMotor4.run(Adafruit_MotorHAT.FORWARD)
+ myMotor3.run(Adafruit_MotorHAT.BACKWARD)
+ time.sleep(0.07)
+ #myMotor4.run(Adafruit_MotorHAT.RELEASE)
+
+
+# Instructions for when the user has an interface
+
+print("z/s: acceleration")
+print("q/d: steering")
+print("l: lights")
+print("x: exit")
+print("Votre choix ? ")
+
+# Infinite loop that will not end until the user presses the
+# exit key
+
+while True:
+    # Keyboard character retrieval method is called and saved
+    # into variable
+    char = getch()
+
+    # The car will drive forward when the "z" key is pressed
+    if(char == "z"):
+       motor_forward()
+    if(char == "z"):
+       myMotor3.run(Adafruit_MotorHAT.RELEASE)
+       myMotor4.run(Adafruit_MotorHAT.RELEASE)
+
+    # The car will reverse when the "w" key is pressed
+    if(char == "s"):
+        motor_backward()        
+    if(char == "s"):
+        myMotor3.run(Adafruit_MotorHAT.RELEASE)
+        myMotor4.run(Adafruit_MotorHAT.RELEASE)
+
+    # The "a" key will toggle the steering left
+    if(char == "q"):
+        motor_left()
+    if(char == "q"):
+        myMotor3.run(Adafruit_MotorHAT.RELEASE)
+        myMotor4.run(Adafruit_MotorHAT.RELEASE)
+
+    # The "d" key will toggle the steering right
+    if(char == "d"):
+        motor_right()
+    if(char == "d"):
+        myMotor3.run(Adafruit_MotorHAT.RELEASE)
+        myMotor4.run(Adafruit_MotorHAT.RELEASE)
+
+    else:
+        myMotor3.run(Adafruit_MotorHAT.RELEASE)
+        myMotor4.run(Adafruit_MotorHAT.RELEASE)
+# The "x" key will break the loop and exit the program
+    if(char == "x"):
+        print("Program Ended")
+        break
+
+#myMotor3.run(Adafruit_MotorHAT.RELEASE)
+#myMotor4.run(Adafruit_MotorHAT.RELEASE)
+
+
+char = ""
