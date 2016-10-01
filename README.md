@@ -12,7 +12,7 @@ Theses scripts are very useful if you want to build a robot-car with camera and 
 ###Some advices to build your Robot-Car
 
 ####Hardware needs: 
-* the Adafruit DC & Stepper Motor HAT for Raspberry Pi
+* the Adafruit DC & Stepper Motor HAT for Raspberry Pi + battery coupler
 * a raspberrypi
 * somes DC motors (associated with a chassis kit)
 * a camera that you can plug to your Raspberry Pi
